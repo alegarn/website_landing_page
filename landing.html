@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- SVG from https://www.svgrepo.com -->
     <!-- the critical css of part 0 -->
     <style>
         body {
@@ -509,20 +510,101 @@
         color: #374151;
         line-height: 1.2;
       }
+      .card.flipped .card-inner {
+        transform: rotateY(180deg);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+      /* Media query for smaller screens (e.g., mobile phones) */
+      @media (max-width: 768px) { /* Adjust breakpoint as needed */
+        .lines-container {
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Aim for 2 cards per row */
+          gap: 0.5em; /* Reduce gap for smaller screens */
+          padding: 0.5rem;
+        }
 
+        .card {
+          min-height: 25vh; /* Slightly reduce card height on mobile */
+        }
 
+        .card-icon {
+          font-size: 2rem; /* Smaller icon */
+        }
 
+        .card-title {
+          font-size: 0.9rem; /* Smaller title */
+        }
+
+        .info-line {
+          font-size: 0.7rem; /* Smaller info text */
+        }
+
+        .line-icon {
+          font-size: 0.8rem;
+        }
+
+        .line-text {
+          font-size: 0.7rem;
+        }
+      }
+
+      @media (max-width: 480px) { /* Even smaller screens, force 2 columns */
+        .lines-container {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.5em;
+          padding: 0.5rem;
+        }
+        .card {
+          aspect-ratio: 2.5 / 3.5; /* Maintain aspect ratio */
+          min-height: unset; /* Let aspect ratio define height */
+        }
+      }
     </style>
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-          const cards = document.querySelectorAll('.card');
-          cards.forEach(card => {
-              card.addEventListener('click', function() {
-                  this.classList.toggle('flipped');
+        const cards = document.querySelectorAll('.card');
+        /**
+         * Detects if the current device is a mobile device.
+         * @returns {boolean} True if on a mobile device, false otherwise.
+         */
+        function isMobileDevice() {
+            return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+        };
+
+        // Click functionality for all devices
+        cards.forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('flipped');
+            });
+        });
+
+        // Mobile-specific scroll-to-flip functionality
+        if (isMobileDevice()) {
+          const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.5 // Trigger when 50% of the card is visible
+          };
+
+          const cardObserver = new IntersectionObserver((entries, observer) => {
+              entries.forEach(entry => {
+                  if (entry.isIntersecting) {
+                      entry.target.classList.add('flipped');
+                      // Optionally, stop observing once flipped to prevent re-flipping on scroll
+                      // observer.unobserve(entry.target);
+                  } else {
+                      // Optionally, remove 'flipped' class when it leaves the viewport
+                      // entry.target.classList.remove('flipped');
+                  }
               });
+          }, observerOptions);
+
+          cards.forEach(card => {
+            cardObserver.observe(card);
           });
+        }
       });
+
     </script>
 
 
@@ -659,10 +741,21 @@
                     <h3 class="card-title">Codebase</h3>
                     <div class="info-line">
                         <span class="line-icon">📚</span>
-                        <span class="line-text">Doc</span>
+                        <span class="line-text">Documentation</span>
                     </div>
                     <div class="info-line">
-                        <span class="line-icon">🐙</span>
+                        <span class="line-icon">
+                          <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                          <svg width="15px" height="15px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                              <g id="Dribbble-Light-Preview" transform="translate(-140.000000, -7559.000000)" fill="#000000">
+                                <g id="icons" transform="translate(56.000000, 160.000000)">
+                                  <path d="M94,7399 C99.523,7399 104,7403.59 104,7409.253 C104,7413.782 101.138,7417.624 97.167,7418.981 C96.66,7419.082 96.48,7418.762 96.48,7418.489 C96.48,7418.151 96.492,7417.047 96.492,7415.675 C96.492,7414.719 96.172,7414.095 95.813,7413.777 C98.04,7413.523 100.38,7412.656 100.38,7408.718 C100.38,7407.598 99.992,7406.684 99.35,7405.966 C99.454,7405.707 99.797,7404.664 99.252,7403.252 C99.252,7403.252 98.414,7402.977 96.505,7404.303 C95.706,7404.076 94.85,7403.962 94,7403.958 C93.15,7403.962 92.295,7404.076 91.497,7404.303 C89.586,7402.977 88.746,7403.252 88.746,7403.252 C88.203,7404.664 88.546,7405.707 88.649,7405.966 C88.01,7406.684 87.619,7407.598 87.619,7408.718 C87.619,7412.646 89.954,7413.526 92.175,7413.785 C91.889,7414.041 91.63,7414.493 91.54,7415.156 C90.97,7415.418 89.522,7415.871 88.63,7414.304 C88.63,7414.304 88.101,7413.319 87.097,7413.247 C87.097,7413.247 86.122,7413.234 87.029,7413.87 C87.029,7413.87 87.684,7414.185 88.139,7415.37 C88.139,7415.37 88.726,7417.2 91.508,7416.58 C91.513,7417.437 91.522,7418.245 91.522,7418.489 C91.522,7418.76 91.338,7419.077 90.839,7418.982 C86.865,7417.627 84,7413.783 84,7409.253 C84,7403.59 88.478,7399 94,7399" id="github-[#142]"></path>
+                                </g>
+                              </g>
+                            </g>
+                          </svg>
+                        </span>
                         <span class="line-text">GitHub</span>
                     </div>
                 </div>
@@ -884,7 +977,13 @@
                 <div class="card-back">
                     <h3 class="card-title">Looking For</h3>
                     <div class="info-line">
-                        <span class="line-icon">⭐</span>
+                        <span class="line-icon">
+                          <?xml version="1.0" encoding="utf-8"?>
+                          <svg width="15px" height="15px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <title>file_type_astro</title>
+                            <path d="M5.9,18.847a7.507,7.507,0,0,0-.572,2.624,3.265,3.265,0,0,0,.551,1.553,7.427,7.427,0,0,0,2.093,1.681L13.1,28.119A7.332,7.332,0,0,0,15.2,29.287a3.239,3.239,0,0,0,1.5,0,7.381,7.381,0,0,0,2.117-1.16L24,24.711a7.512,7.512,0,0,0,2.117-1.688,3.241,3.241,0,0,0,.55-1.563,7.515,7.515,0,0,0-.587-2.643L21.547,4.551a3.973,3.973,0,0,0-.54-1.3,1.733,1.733,0,0,0-.7-.51,3.972,3.972,0,0,0-1.4-.122H13.005a3.932,3.932,0,0,0-1.4.125,1.713,1.713,0,0,0-.7.512,3.94,3.94,0,0,0-.535,1.3L5.9,18.848Zm13.24-13.2a3.329,3.329,0,0,1,.441,1.093l3.892,12.784a16.168,16.168,0,0,0-4.653-1.573L16.291,9.391a.331.331,0,0,0-.513-.169.323.323,0,0,0-.119.169l-2.5,8.557a16.14,16.14,0,0,0-4.674,1.579L12.393,6.743a3.281,3.281,0,0,1,.442-1.094,1.458,1.458,0,0,1,.582-.43,3.31,3.31,0,0,1,1.175-.1h2.793a3.314,3.314,0,0,1,1.176.1,1.454,1.454,0,0,1,.583.432ZM16.127,21.06a5.551,5.551,0,0,0,3.4-.923,2.8,2.8,0,0,1-.207,2.182A3.938,3.938,0,0,1,17.773,23.8c-.674.428-1.254.8-1.254,1.787a2.079,2.079,0,0,0,.209.914,2.49,2.49,0,0,1-1.535-2.3v-.061c0-.683,0-1.524-.962-1.524a1.028,1.028,0,0,0-.391.077,1.021,1.021,0,0,0-.552.551,1.03,1.03,0,0,0-.079.391,3.769,3.769,0,0,1-.988-2.644,4.206,4.206,0,0,1,.175-1.248c.4.757,1.92,1.32,3.731,1.32Z" style="fill:#ff5d01;fill-rule:evenodd"/>
+                          </svg>
+                        </span>
                         <span class="line-text">Static site with Astro</span>
                     </div>
                 </div>
@@ -928,6 +1027,28 @@
                         <span class="line-icon">🐘</span>
                         <span class="line-text">PostgreSQL</span>
                     </div>
+                    <div class="info-line">
+                        <span class="line-icon">
+                          <svg width="15px" height="15px" viewBox="0 0 109 113" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint0_linear)"/>
+                            <path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint1_linear)" fill-opacity="0.2"/>
+                            <path d="M45.317 2.07103C48.1765 -1.53037 53.9745 0.442937 54.0434 5.041L54.4849 72.2922H9.83113C1.64038 72.2922 -2.92775 62.8321 2.1655 56.4175L45.317 2.07103Z" fill="#3ECF8E"/>
+                            <defs>
+                              <linearGradient id="paint0_linear" x1="53.9738" y1="54.974" x2="94.1635" y2="71.8295" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#249361"/>
+                                <stop offset="1" stop-color="#3ECF8E"/>
+                              </linearGradient>
+                              <linearGradient id="paint1_linear" x1="36.1558" y1="30.578" x2="54.4844" y2="65.0806" gradientUnits="userSpaceOnUse">
+                                <stop/>
+                                <stop offset="1" stop-opacity="0"/>
+                              </linearGradient>
+                            </defs>
+                            </svg>
+
+                        </span>
+                        <span class="line-text">Supabase</span>
+                    </div>
+
                 </div>
             </div>
         </div>
