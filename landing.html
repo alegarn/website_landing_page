@@ -30,76 +30,87 @@
         position: relative;
       }
 
-      .container {
+      .section {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .hero-content {
+        color: white;
+        z-index: 100;
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        position: relative;
-        min-height: 100vh;
+        min-height: 100vh; 
       }
-
-      .logo-container, .text-container {
+      
+      .hero-title {
+        position: absolute;
+        left: 50%;
+        white-space: nowrap;
+        color: white !important;
+        font-size: 3em; 
+        margin: 0;
         opacity: 0;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
       }
-
-      .logo-container {
-        animation: logoFadeIn 1s forwards;
-        animation-delay: 1.5s; 
-      }
-
-      .logo-container img {
-        max-width: 200px;
+      
+      .hero-logo {
+        width: 150px; 
+        height: 150px;
+        border-radius: 20px;
+        margin: 2rem 0; 
+        box-shadow: 0 0 40px rgba(0, 160, 153, 0.5);
+        border: 2px solid rgba(0, 160, 153, 0.7);
+        opacity: 0;
+        max-width: 200px; 
         height: auto;
       }
 
-      /* Absolute positioning for text to center them independently */
-      .text-container {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        white-space: nowrap;
-        color: white !important; 
-      }
-
-      .text-container h1 {
-        font-size: 2.5em;
-        margin: 0;
-      }
-
-      .text-container.one-idea {
-        animation: textFadeIn 0.5s forwards, textPushUp 0.5s forwards;
-        animation-delay: 0s, 1s;
+      /* Specific animations for hero content elements */
+      .hero-content h1.hero-title:nth-of-type(1) {
         top: 40%;
         transform: translate(-50%, -40%);
+        animation: fadeIn 0.5s forwards, textPushUp 0.5s forwards, titleGlow 3s ease-out 2.5s forwards;
+        animation-delay: 0s, 1s;
       }
 
-      .text-container.one-app {
-        animation: textFadeIn 0.5s forwards, textPushDown 0.5s forwards;
-        animation-delay: 0.5s, 1s;
+      .hero-content img.hero-logo {
+        animation: fadeIn 1s forwards, logoGlow 1s ease-out 2.5s forwards;
+        animation-delay: 1.5s;
+      }
+
+      .hero-content h1.hero-title:nth-of-type(2) {
         top: 60%;
         transform: translate(-50%, -60%);
+        animation: fadeIn 0.5s forwards, textPushDown 0.5s forwards, titleGlow 3s ease-out 2.5s forwards;
+        animation-delay: 0.5s, 1s;
       }
 
       .arrow-down {
+        position: absolute;
+        top: 95vh;
+        left: 50%;
+        transform: translateX(-50%);
         width: 0;
         height: 0;
         border-left: 20px solid transparent;
         border-right: 20px solid transparent;
         border-top: 20px solid white;
-        margin-top: 50px;
         opacity: 0;
-        animation: fadeIn 1s forwards;
-        animation-delay: 4.1s;
+        animation: fadeIn 1s forwards, glow 1s ease-out infinite;
+        animation-delay: 2.5s;
         cursor: pointer;
         transition: transform 0.3s ease;
+        z-index: 101;
       }
 
-      .arrow-down:hover {
-        transform: translateY(5px);
-      }
-
-      @keyframes textFadeIn {
+      @keyframes fadeIn {
         from {
           opacity: 0;
         }
@@ -113,7 +124,7 @@
           transform: translate(-50%, -40%);
         }
         to {
-          transform: translate(-50%, -170px);
+          transform: translate(-50%, -2em);
         }
       }
 
@@ -122,41 +133,44 @@
           transform: translate(-50%, -55%);
         }
         to {
-          transform: translate(-50%, 50px);
+          transform: translate(-50%, 1em);
         }
       }
 
-      @keyframes logoFadeIn {
+      @keyframes logoGlow {
         from {
-          opacity: 0;
+          box-shadow: 0 0 40px rgba(0, 160, 153, 0.5);
         }
         to {
-          opacity: 1;
+          box-shadow: 0 0 60px rgba(0, 160, 153, 0.8), 0 0 30px rgba(255, 255, 255, 0.4); 
+        }
+      }
+
+      @keyframes titleGlow {
+        from {
+          text-shadow: 0 0 0 rgba(0, 160, 153, 0.5);
+        }
+        to {
+          text-shadow: 0 0 20px rgba(0, 160, 153, 0.4), 0 0 40px rgba(255, 255, 255, 0.8);
         }
       }
     </style>
-
-    <!-- CSS Part 1-->
-
 </head>
 <body>
   
   <!-- PART 0: The landing -->
   <section class="section">
-    <div class="container">
-        <div class="text-container one-idea">
-            <h1>One idea</h1>
-        </div>
-        <div class="logo-container">
-            <img src="logo.min.jpg" alt="Logo">
-        </div>
-        <div class="text-container one-app">
-            <h1>One app</h1>
-        </div>
-        <div class="arrow-down"></div>
+    <div class="hero-content">
+        <h1 class="hero-title">One Idea</h1>
+        <img src="logo.min.jpg" class="hero-logo" alt="Company Logo">
+        <h1 class="hero-title">One App</h1>
     </div>
+    <a href="#hero" class="arrow-down" title="Scroll to the next section"></a>
   </section>
 <!--
+
+    ent/plugins/coblocks/dist/js/coblocks-animation.js -> delete
+
     <p>https://code.tutsplus.com/how-to-create-a-wordpress-child-theme--cms-33278t</p>
      
     Creating the Child Theme
@@ -286,22 +300,22 @@
           z-index: 1;
           opacity: 0.7;
         }
-        
+/*         
         .hero-content {
-            text-align: center;
-            color: white;
-            z-index: 100;
-            position: relative;
+          text-align: center;
+          color: white;
+          z-index: 100;
+          position: relative;
         }
         
         .hero-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            margin: 1rem 0;
-            font-weight: 700;
-            text-shadow: 0 0 30px rgba(0, 160, 153, 0.6);
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 1s ease 0.5s forwards;
+          font-size: clamp(2.5rem, 5vw, 4rem);
+          margin: 1rem 0;
+          font-weight: 700;
+          text-shadow: 0 0 30px rgba(0, 160, 153, 0.6);
+          opacity: 0;
+          transform: translateY(50px);
+          animation: fadeInUp 1s ease 0.5s forwards;
         }
         
         .hero-logo {
@@ -312,10 +326,9 @@
           box-shadow: 0 0 40px rgba(0, 160, 153, 0.5);
           border: 2px solid rgba(0, 160, 153, 0.7);
           opacity: 0;
-          transform: translateY(50px);
           animation: fadeInUp 1s ease 0.7s forwards;
         }
-        
+       */  
         /* Floating cards with glassmorphism */
         .floating-card {
           position: absolute;
@@ -497,9 +510,9 @@
 
     <section class="hero-section" id="hero">
         <div class="hero-content">
-            <h1 class="hero-title">One Idea</h1>
+            <!-- <h1 class="hero-title">One Idea</h1> -->
             <img src="logo.min.jpg" class="hero-logo" alt="Company Logo">
-            <h1 class="hero-title">One App</h1>
+            <!-- <h1 class="hero-title">One App</h1> -->
         </div>
         
         <!-- Floating cards with glassmorphism -->
@@ -530,41 +543,41 @@
     </section>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Create floating particles
-            const createParticle = () => {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.width = particle.style.height = Math.random() * 6 + 3 + 'px';
-                particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
-                document.querySelector('.hero-section').appendChild(particle);
-                
-                setTimeout(() => particle.remove(), 10000);
-            };
-            
-            // Create particles periodically
-            setInterval(createParticle, 1000);
-            
-            // Navigation active state
-            const navLinks = document.querySelectorAll('.nav-links a');
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                });
-            });
-            
-            // Card interactions
-            const cards = document.querySelectorAll('.floating-card');
-            cards.forEach(card => {
-                card.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    console.log('Clicked:', card.textContent);
-                    // Modal logic can be added here
-                });
-            });
-        });
+      document.addEventListener('DOMContentLoaded', () => {
+          // Create floating particles
+          const createParticle = () => {
+              const particle = document.createElement('div');
+              particle.className = 'particle';
+              particle.style.left = Math.random() * 100 + '%';
+              particle.style.width = particle.style.height = Math.random() * 6 + 3 + 'px';
+              particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+              document.querySelector('.hero-section').appendChild(particle);
+              
+              setTimeout(() => particle.remove(), 10000);
+          };
+          
+          // Create particles periodically
+          setInterval(createParticle, 1000);
+          
+          // Navigation active state
+          const navLinks = document.querySelectorAll('.nav-links a');
+          navLinks.forEach(link => {
+              link.addEventListener('click', (e) => {
+                  navLinks.forEach(l => l.classList.remove('active'));
+                  link.classList.add('active');
+              });
+          });
+          
+          // Card interactions
+          const cards = document.querySelectorAll('.floating-card');
+          cards.forEach(card => {
+              card.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  console.log('Clicked:', card.textContent);
+                  // Modal logic can be added here
+              });
+          });
+      });
     </script>
 
 
@@ -573,9 +586,7 @@
     <!-- ? non moving card grid (memory), are expanding on hover -->
     <!-- ? 3 lines, with moving cards, rectangular cards like playcards, make a text appear instead of the icon -->
     <style>
-      .section {
-        width: 100%;
-      }
+
       .card-section {
         background-color: white;
       }
@@ -774,7 +785,6 @@
           });
         }
       });
-
     </script>
 
 
@@ -1447,22 +1457,22 @@
                     </div>
                 </div>
                 
-                <div class="contact-item">
+                <!-- <div class="contact-item">
                     <div class="contact-icon">📱</div>
                     <div class="contact-label">Phone</div>
                     <div class="contact-value">
                         <a href="tel:+1234567890">+1 (234) 567-890</a>
                     </div>
-                </div>
+                </div> -->
                 
-                <div class="contact-item">
+                <!-- <div class="contact-item">
                     <div class="contact-icon">📍</div>
                     <div class="contact-label">Location</div>
                     <div class="contact-value">
                         On the net<br>
                         Available Worldwide
                     </div>
-                </div>
+                </div> -->
                 
                 <div class="contact-item">
                     <div class="contact-icon">🌐</div>
