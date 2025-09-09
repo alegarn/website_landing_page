@@ -40,7 +40,7 @@
 
       .hero-content {
         color: white;
-        z-index: 100;
+        z-index: 49;
         position: relative;
         display: flex;
         flex-direction: column;
@@ -168,8 +168,27 @@
     <a href="#hero" class="arrow-down" title="Scroll to the next section"></a>
   </section>
 <!--
+  finish the landing (the responsive)
+  do the ajax loading
+  and minify
 
-    ent/plugins/coblocks/dist/js/coblocks-animation.js -> delete
+  search for   ent/plugins/coblocks/dist/js/coblocks-animation.js -> delete all coblocks code
+
+    Go\page_title(); to get the page content 
+
+  
+
+    prompt (with 1 to update, using 3 ajax loading. 1 - Part 0 logo, 2 - part 1 and 3 - the rest after the landing html/css/js part 0 / and use nonces, `wp_enqueue_script` and `wp_localize_script` for the update.):
+    ```
+    ### New Plan
+
+1. __I will provide you with a self-contained PHP snippet.__ This snippet will handle everything: using "Go\page_title();" to get the page content,
+ enqueueing the script, localizing it, and setting up the AJAX action to load your static `landing.html` content.
+2. __You will add this snippet to your theme.__ The best place would be at `functions.php`. This is a small, self-contained addition and is much safer than editing existing functions.
+3. __I will create the JavaScript file__ at `../../alegar.ch/js/ajax-script.js`.
+4. __I will modify `landing-page.php`__ to remove the old script and prepare the HTML for the new AJAX content.
+
+    ```
 
     <p>https://code.tutsplus.com/how-to-create-a-wordpress-child-theme--cms-33278t</p>
      
@@ -224,9 +243,10 @@
         }
         
         .nav-links {
-            display: flex;
-            gap: 20px;
-            list-style: none;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+          list-style: none;
         }
         
         .nav-links a {
@@ -247,17 +267,18 @@
         
         /* Hero section with tech patterns */
         .hero-section {
-            position: relative;
-            min-height: 100vh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: 
-                radial-gradient(circle at 25% 25%, rgba(0, 160, 153, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(0, 160, 153, 0.15) 0%, transparent 50%),
-                linear-gradient(135deg, #005c59 0%, #004a47 100%);
-            overflow: hidden;
+          position: relative;
+          height: 100vh;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background: 
+              radial-gradient(circle at 25% 25%, rgba(0, 160, 153, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 75% 75%, rgba(0, 160, 153, 0.15) 0%, transparent 50%),
+              linear-gradient(135deg, #005c59 0%, #004a47 100%);
+          overflow: hidden;
         }
         
         /* Geometric dot pattern */
@@ -300,35 +321,7 @@
           z-index: 1;
           opacity: 0.7;
         }
-/*         
-        .hero-content {
-          text-align: center;
-          color: white;
-          z-index: 100;
-          position: relative;
-        }
-        
-        .hero-title {
-          font-size: clamp(2.5rem, 5vw, 4rem);
-          margin: 1rem 0;
-          font-weight: 700;
-          text-shadow: 0 0 30px rgba(0, 160, 153, 0.6);
-          opacity: 0;
-          transform: translateY(50px);
-          animation: fadeInUp 1s ease 0.5s forwards;
-        }
-        
-        .hero-logo {
-          width: 150px;
-          height: 150px;
-          border-radius: 20px;
-          margin: 2rem 0;
-          box-shadow: 0 0 40px rgba(0, 160, 153, 0.5);
-          border: 2px solid rgba(0, 160, 153, 0.7);
-          opacity: 0;
-          animation: fadeInUp 1s ease 0.7s forwards;
-        }
-       */  
+
         /* Floating cards with glassmorphism */
         .floating-card {
           position: absolute;
@@ -411,24 +404,24 @@
         }
         /* Animations */
         @keyframes fadeInUp {
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         
         @keyframes floatCard {
           0%, 100% { 
-              transform: translateY(0px) rotate(0deg); 
+            transform: translateY(0px) rotate(0deg); 
           }
           25% { 
-              transform: translateY(-15px) rotate(0.5deg); 
+            transform: translateY(-15px) rotate(0.5deg); 
           }
           50% { 
-              transform: translateY(-8px) rotate(-0.3deg); 
+            transform: translateY(-8px) rotate(-0.3deg); 
           }
           75% { 
-              transform: translateY(-20px) rotate(0.3deg); 
+            transform: translateY(-20px) rotate(0.3deg); 
           }
         }
         
@@ -459,10 +452,12 @@
         @media (max-width: 768px) {
           .nav {
             padding: 8px 16px;
+            width: 90%;
           }
           
           .nav-links {
             gap: 16px;
+            justify-content: center;
           }
           
           .nav-links a {
@@ -476,8 +471,9 @@
             font-size: 14px;
           }
           
-          .card-5, .card-6 {
-            display: none;
+          .card-6 {
+            top: 15%;
+            right: 15%;
           }
         }
         
@@ -497,49 +493,51 @@
         }
     </style>
 
-    <!-- Navigation -->
-    <nav class="nav">
-        <ul class="nav-links">
-            <li><a href="/" class="active">Home</a></li>
-            <li><a href="#hero">Portfolio</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+   
 
     <section class="hero-section" id="hero">
-        <div class="hero-content">
-            <!-- <h1 class="hero-title">One Idea</h1> -->
-            <img src="logo.min.jpg" class="hero-logo" alt="Company Logo">
-            <!-- <h1 class="hero-title">One App</h1> -->
-        </div>
-        
-        <!-- Floating cards with glassmorphism -->
-        <div style="background-image:url('Hero_tables_ai.png')" alt="Tables AI" class="floating-card card-1">
-          <a class="card-content">
-            <h2 class="floating-card-title">Tables AI</h2>
-          </a>
-        </div>
-        <div style="background-image:url('Score_it.png')" alt="Score it" class="floating-card card-5">
-          <a class="card-content">
-            <h2 class="floating-card-title">Score it</h2>
-          </a>
-        </div>
-        <div style="background-image:url('apexpinnaclegrowth.png')" alt="Apex Pinnacle Growth" class="floating-card card-6">
-          <a class="card-content">
-            <h2 class="floating-card-title">Apex Pinnacle Growth</h2>
-          </a>
-        </div>
-        <div style="background-image:url('acephal.png')" alt="Acephal" class="floating-card card-4">
-          <a class="card-content">
-            <h2 class="floating-card-title">Acephal</h2>
-          </a>
-        </div>
-        <!-- <a href="#about" class="floating-card card-3">About</a>
-        <a href="#blog" class="floating-card card-4">Blog</a>
-        <a href="#projects" class="floating-card card-5">Projects</a>
-        <a href="#contact" class="floating-card card-6">Contact</a> -->
+       <!-- Navigation -->
+      <nav class="nav">
+        <ul class="nav-links">
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="#hero">Portfolio</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="hero-content">
+          <!-- <h1 class="hero-title">One Idea</h1> -->
+          <img src="logo.min.jpg" class="hero-logo" alt="Company Logo">
+          <!-- <h1 class="hero-title">One App</h1> -->
+      </div>
+      
+      <!-- Floating cards with glassmorphism -->
+      <div style="background-image:url('Hero_tables_ai.png')" alt="Tables AI" class="floating-card card-1">
+        <a class="card-content">
+          <h2 class="floating-card-title">Tables AI</h2>
+        </a>
+      </div>
+      <div style="background-image:url('Score_it.png')" alt="Score it" class="floating-card card-5">
+        <a class="card-content">
+          <h2 class="floating-card-title">Score it</h2>
+        </a>
+      </div>
+      <div style="background-image:url('apexpinnaclegrowth.png')" alt="Apex Pinnacle Growth" class="floating-card card-6">
+        <a class="card-content">
+          <h2 class="floating-card-title">Apex Pinnacle Growth</h2>
+        </a>
+      </div>
+      <div style="background-image:url('acephal.png')" alt="Acephal" class="floating-card card-4">
+        <a class="card-content">
+          <h2 class="floating-card-title">Acephal</h2>
+        </a>
+      </div>
+      <!-- <a href="#about" class="floating-card card-3">About</a>
+      <a href="#blog" class="floating-card card-4">Blog</a>
+      <a href="#projects" class="floating-card card-5">Projects</a>
+      <a href="#contact" class="floating-card card-6">Contact</a> -->
     </section>
 
     <script>
