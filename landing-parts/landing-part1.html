@@ -1,0 +1,354 @@
+<style>
+    
+    /* Navigation */
+    .nav {
+      position: relative;
+      top: 4rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 160, 153, 0.3);
+      border-radius: 50px;
+      padding: 12px 24px;
+      z-index: 1000;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      list-style: none;
+    }
+    
+    .nav-links a {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding: 8px 16px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-links a:hover, .nav-links a.active {
+        color: #00a099;
+        background: rgba(0, 160, 153, 0.2);
+        box-shadow: 0 0 15px rgba(0, 160, 153, 0.4);
+    }
+    
+    /* Hero section with tech patterns */
+    .hero-section {
+      position: relative;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: 
+          radial-gradient(circle at 25% 25%, rgba(0, 160, 153, 0.15) 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, rgba(0, 160, 153, 0.15) 0%, transparent 50%),
+          linear-gradient(135deg, #005c59 0%, #004a47 100%);
+      overflow: hidden;
+    }
+    
+    /* Geometric dot pattern */
+    .hero-section::before {
+      --color-nuance-1: rgba(0, 160, 153, 0.3);
+      --color-nuance-2: rgba(0, 160, 153, 0.15); /* A lighter nuance for the other half */
+      --pattern-color: rgba(0, 160, 153, 0.5); /* A slightly darker nuance for the pattern */
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(45deg, var(--pattern-color) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--pattern-color) 25%, transparent 25%),
+        linear-gradient(135deg, var(--pattern-color) 25%, transparent 25%),
+        linear-gradient(-135deg, var(--pattern-color) 25%, transparent 25%);
+      background-size: 20px 20px; /* Size of the small triangles in the pattern */
+      background-position: 0 0, 10px 0, 10px 10px, 0 10px; /* Positioning for seamless pattern */
+      background-repeat: repeat; /* Ensure the pattern repeats */
+      /*
+      * Layer 2: The main diagonal split. This will be the base background.
+      * It's placed as the last background-image, so the pattern is on top.
+      */
+      background-color: var(--color-nuance-2); /* Fallback color for the second half */
+      background-image:
+        linear-gradient(to bottom right, var(--color-nuance-1) 50%, transparent 50%); /* Main diagonal triangle */
+
+      /*
+      * Mask the pattern to only appear in the top-left triangle.
+      * The mask uses a linear-gradient that matches the shape of the top-left triangle.
+      * Where the mask is white, the background-image (pattern) will be visible.
+      * Where the mask is transparent, the background-image (pattern) will be hidden.
+      */
+      mask-image: linear-gradient(to bottom right, white 50%, transparent 50%);
+      mask-mode: alpha; /* Use the alpha channel of the mask-image */
+      mask-size: 100% 100%; 
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.7;
+    }
+
+    /* Floating cards with glassmorphism */
+    .floating-card {
+      position: absolute;
+      width: 150px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.08);
+      background-position: center;
+      background-size: cover;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+          0 8px 32px rgba(31, 38, 135, 0.37),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+      animation: floatCard 6s ease-in-out infinite;
+      z-index: 50;
+      text-decoration: none;
+    }
+    
+    .floating-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -10%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s ease;
+      border-radius: 16px;
+    }
+    
+    .floating-card:hover::before {
+      left: 10%;
+    }
+    
+    .floating-card:hover {
+      transform: scale(1.05) translateY(-5px);
+      /* background: rgba(255, 255, 255, 0.12); */
+      border-color: rgba(0, 160, 153, 0.6);
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(0, 160, 153, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Card positioning */
+    .card-1 { top: 15%; left: 8%; animation-delay: 0s; }
+    .card-2 { top: 25%; right: 12%; animation-delay: 1s; }
+    .card-3 { bottom: 35%; left: 15%; animation-delay: 2s; }
+    .card-4 { bottom: 20%; right: 8%; animation-delay: 3s; }
+    .card-5 { top: 55%; left: 3%; animation-delay: 4s; }
+    .card-6 { top: 65%; right: 25%; animation-delay: 5s; }
+    
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-decoration: none;
+    }
+    .floating-card-title {
+      position: relative;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      color: #fff;
+    }
+    .card-image {
+      object-fit:fill;
+      border-radius: 16px;
+    }
+    /* Animations */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes floatCard {
+      0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+      }
+      25% { 
+        transform: translateY(-15px) rotate(0.5deg); 
+      }
+      50% { 
+        transform: translateY(-8px) rotate(-0.3deg); 
+      }
+      75% { 
+        transform: translateY(-20px) rotate(0.3deg); 
+      }
+    }
+    
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      background: rgba(0, 160, 153, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: particleFloat 8s linear infinite;
+      z-index: 2;
+    }
+    
+    @keyframes particleFloat {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .nav {
+        padding: 8px 16px;
+        width: 90%;
+      }
+      
+      .nav-links {
+        gap: 16px;
+        justify-content: center;
+      }
+      
+      .nav-links a {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+      }
+      
+      .floating-card {
+        width: 120px;
+        height: 160px;
+        font-size: 14px;
+      }
+      
+      .card-6 {
+        top: 15%;
+        right: 15%;
+      }
+    }
+    
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      .floating-card,
+      .particle {
+          animation: none;
+      }
+      
+      .hero-title,
+      .hero-logo {
+          animation: none;
+          opacity: 1;
+          transform: none;
+      }
+    }
+</style>
+
+<section class="hero-section" id="hero">
+    <!-- Navigation -->
+  <nav class="nav">
+    <ul class="nav-links">
+      <li><a href="/" class="active">Home</a></li>
+      <li><a href="#hero">Portfolio</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero-content">
+    <img 
+      src="https://alegar.ch/wp-content/uploads/2025/09/logo.min_.jpg" 
+      class="hero-logo" 
+      alt="Company Logo"
+      loading="lazy"
+      >
+  </div>
+  
+  <!-- Floating cards with glassmorphism -->
+  <div style="background-image:url('https://alegar.ch/wp-content/uploads/2024/07/Hero_tables_ai.png')" alt="Tables AI" class="floating-card card-1">
+    <a class="card-content" href="https://alegar.ch/tables-ai-pending/">
+      <h2 class="floating-card-title">Tables AI</h2>
+    </a>
+  </div>
+  <div style="background-image:url('https://alegar.ch/wp-content/uploads/2022/06/Screenshot_2022-06-12_15-32-44.png')" alt="Score it" class="floating-card card-5">
+    <a class="card-content" href="https://alegar.ch/scoreit/">
+      <h2 class="floating-card-title">Score it</h2>
+    </a>
+  </div>
+  <div style="background-image:url('https://alegar.ch/wp-content/uploads/2025/09/apexpinnaclegrowth.png')" alt="Apex Pinnacle Growth" class="floating-card card-6">
+    <a class="card-content" href="https://apexpinnaclegrowth.com">
+      <h2 class="floating-card-title">Apex Pinnacle Growth</h2>
+    </a>
+  </div>
+  <div style="background-image:url('https://alegar.ch/wp-content/uploads/2023/06/2023-06-18_14-58_acephal.png')" alt="Acephal" class="floating-card card-4">
+    <a class="card-content" href="https://alegar.ch/acephal/">
+      <h2 class="floating-card-title">Acephal</h2>
+    </a>
+  </div>
+  <!-- <a href="#about" class="floating-card card-3">About</a>
+  <a href="#blog" class="floating-card card-4">Blog</a>
+  <a href="#projects" class="floating-card card-5">Projects</a>
+  <a href="#contact" class="floating-card card-6">Contact</a> -->
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      // Create floating particles
+      const createParticle = () => {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.width = particle.style.height = Math.random() * 6 + 3 + 'px';
+          particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+          document.querySelector('.hero-section').appendChild(particle);
+          
+          setTimeout(() => particle.remove(), 10000);
+      };
+      
+      // Create particles periodically
+      setInterval(createParticle, 1000);
+      
+      // Navigation active state
+      const navLinks = document.querySelectorAll('.nav-links a');
+      navLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+              navLinks.forEach(l => l.classList.remove('active'));
+              link.classList.add('active');
+          });
+      });
+      
+      // Card interactions
+      const cards = document.querySelectorAll('.floating-card');
+      cards.forEach(card => {
+          card.addEventListener('click', (e) => {
+              e.preventDefault();
+              console.log('Clicked:', card.textContent);
+              // Modal logic can be added here
+          });
+      });
+  });
+</script>
