@@ -1,0 +1,983 @@
+<style>
+
+  .card-section {
+    background-color: white;
+  }
+  .lines-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1em;
+    width: 100%;
+    padding: 1rem;
+    min-height: 60vh;
+  }
+
+  /* The main card container - acts as the hover target and sets perspective */
+  .card {
+    background-color: transparent; /* Important: No background on the hover container */
+    min-height: 30vh;
+    aspect-ratio: 2.5 / 3.5;
+    border: none;
+    perspective: 1000px;
+  }
+
+  /* Inner container that handles the 3D transformation */
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s ease;
+    transform-style: preserve-3d;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+  }
+
+  /* On hover of the main container, rotate the inner container */
+  .card:hover .card-inner {
+    transform: rotateY(180deg);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Common styles for both Front and Back faces */
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* For Safari */
+    backface-visibility: hidden;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+  }
+
+  /* Style for the front face */
+  .card-front {
+    background: #005c59;
+  }
+
+  /* Style for the back face, initially hidden */
+  .card-back {
+    background: white;
+    border: 1px solid #005c59;
+    color: #333;
+    transform: rotateY(180deg);
+  }
+
+  /* Icon styling */
+  .card-icon {
+    font-size: 2.5rem;
+    color: white;
+  }
+
+  /* Content on the back */
+  .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .text-light {
+    color: white !important;
+  }
+
+  .info-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    width: 100%;
+  }
+
+  .line-icon {
+    color: #005c59;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .line-text {
+    font-size: 0.8rem;
+    color: #374151;
+    line-height: 1.2;
+  }
+  .card.flipped .card-inner {
+    transform: rotateY(180deg);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  @media (max-width: 768px) { 
+    .lines-container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.5em;
+      padding: 0.5rem;
+    }
+
+    .card {
+      min-height: 25vh; 
+    }
+
+    .card-icon {
+      font-size: 2rem;
+    }
+
+    .card-title {
+      font-size: 0.9rem; 
+    }
+
+    .info-line {
+      font-size: 0.7rem; 
+    }
+
+    .line-icon {
+      font-size: 0.8rem;
+    }
+
+    .line-text {
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .lines-container {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5em;
+      padding: 0.5rem;
+    }
+    .card {
+      aspect-ratio: 2.5 / 3.5; 
+      min-height: unset;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.card');
+    /**
+     * Detects if the current device is a mobile device.
+     * @returns {boolean} True if on a mobile device, false otherwise.
+     */
+    function isMobileDevice() {
+        return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+    };
+
+    // Click functionality for all devices
+    cards.forEach(card => {
+        card.addEventListener('click', function() {
+            this.classList.toggle('flipped');
+        });
+    });
+
+    // Mobile-specific scroll-to-flip functionality
+    if (isMobileDevice()) {
+      const observerOptions = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.5 // Trigger when 50% of the card is visible
+      };
+
+      const cardObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                  entry.target.classList.add('flipped');
+                  // Optionally, stop observing once flipped to prevent re-flipping on scroll
+                  // observer.unobserve(entry.target);
+              } else {
+                  // Optionally, remove 'flipped' class when it leaves the viewport
+                  // entry.target.classList.remove('flipped');
+              }
+          });
+      }, observerOptions);
+
+      cards.forEach(card => {
+        cardObserver.observe(card);
+      });
+    }
+  });
+</script>
+
+
+<section class="section card-section" id="services">
+  <div class="lines-container">
+    <!-- Price Card -->
+    <div class="card">
+      <div class="card-inner">
+          <div class="card-front">
+              <div class="card-icon">💰</div>
+          </div>
+          <div class="card-back">
+              <h3 class="card-title">Pricing</h3>
+              <div class="info-line">
+                  <span class="line-icon">💻</span>
+                  <span class="line-text">Code: 300€ / day</span>
+              </div>
+              <div class="info-line">
+                  <span class="line-icon">📝</span>
+                  <span class="line-text">CMS: 20€ / hour</span>
+              </div>
+          </div>
+      </div>
+    </div>
+    <!-- SEO & Accessibility Card -->
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">🔍</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">SEO & Accessibility</h3>
+                <div class="info-line">
+                    <span class="line-icon">✅</span>
+                    <span class="line-text">SEO Optimized</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">♿</span>
+                    <span class="line-text">Accessibility Compliant</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Web Stack Card -->
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">🌐</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Web Stack</h3>
+                <div class="info-line">
+                    <span class="line-icon">
+                      <?xml version="1.0" encoding="utf-8"?>
+                      <svg width="18px" height="18px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <title>svelte_icon</title>
+                        <path d="M26.47,5.7A8.973,8.973,0,0,0,14.677,3.246L7.96,7.4a7.461,7.461,0,0,0-3.481,5.009,7.686,7.686,0,0,0,.8,5.058,7.358,7.358,0,0,0-1.151,2.8,7.789,7.789,0,0,0,1.4,6.028,8.977,8.977,0,0,0,11.794,2.458L24.04,24.6a7.468,7.468,0,0,0,3.481-5.009,7.673,7.673,0,0,0-.8-5.062,7.348,7.348,0,0,0,1.152-2.8A7.785,7.785,0,0,0,26.47,5.7" style="fill:#ff3e00"/>
+                        <path d="M14.022,26.64A5.413,5.413,0,0,1,8.3,24.581a4.678,4.678,0,0,1-.848-3.625,4.307,4.307,0,0,1,.159-.61l.127-.375.344.238a8.76,8.76,0,0,0,2.628,1.274l.245.073-.025.237a1.441,1.441,0,0,0,.271.968,1.63,1.63,0,0,0,1.743.636,1.512,1.512,0,0,0,.411-.175l6.7-4.154a1.366,1.366,0,0,0,.633-.909,1.407,1.407,0,0,0-.244-1.091,1.634,1.634,0,0,0-1.726-.622,1.509,1.509,0,0,0-.413.176l-2.572,1.584a4.934,4.934,0,0,1-1.364.582,5.415,5.415,0,0,1-5.727-2.06A4.678,4.678,0,0,1,7.811,13.1,4.507,4.507,0,0,1,9.9,10.09l6.708-4.154a4.932,4.932,0,0,1,1.364-.581A5.413,5.413,0,0,1,23.7,7.414a4.679,4.679,0,0,1,.848,3.625,4.272,4.272,0,0,1-.159.61l-.127.375-.344-.237a8.713,8.713,0,0,0-2.628-1.274l-.245-.074.025-.237a1.438,1.438,0,0,0-.272-.968,1.629,1.629,0,0,0-1.725-.622,1.484,1.484,0,0,0-.411.176l-6.722,4.14a1.353,1.353,0,0,0-.631.908,1.394,1.394,0,0,0,.244,1.092,1.634,1.634,0,0,0,1.726.621,1.538,1.538,0,0,0,.413-.175l2.562-1.585a4.9,4.9,0,0,1,1.364-.581,5.417,5.417,0,0,1,5.728,2.059,4.681,4.681,0,0,1,.843,3.625A4.5,4.5,0,0,1,22.1,21.905l-6.707,4.154a4.9,4.9,0,0,1-1.364.581" style="fill:#fff"/>
+                      </svg>
+                    </span>
+                    <span class="line-text">Svelte</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">
+                      <?xml version="1.0" encoding="UTF-8"?>
+                      <svg width="18px" height="18px" viewBox="0 -166 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid">
+                        <g fill="#CC0000">
+                          <path d="M219.115365,150.633753 C219.115365,150.633753 241.684635,148.699244 241.684635,119.552645 C241.684635,90.4060453 214.343577,87.697733 214.343577,87.697733 L165.078086,87.697733 L165.078086,179.651385 L189.839798,179.651385 L189.839798,157.469018 L211.248363,179.651385 L247.875063,179.651385 L219.115365,150.633753 Z M209.571788,131.804534 L189.839798,131.804534 L189.839798,110.782872 L209.700756,110.782872 C209.700756,110.782872 215.246348,112.846348 215.246348,121.229219 C215.246348,129.612091 209.571788,131.804534 209.571788,131.804534 Z M302.815113,88.3425693 L277.666499,88.3425693 C259.74005,88.3425693 253.678589,104.592443 253.678589,112.330479 L253.678589,179.651385 L278.827204,179.651385 L278.827204,163.530479 L302.428212,163.530479 L302.428212,179.651385 L326.803023,179.651385 L326.803023,112.330479 C326.803023,92.7274559 309.005542,88.3425693 302.815113,88.3425693 Z M302.428212,137.479093 L278.698237,137.479093 L278.698237,115.167758 C278.698237,115.167758 278.698237,110.138035 286.565239,110.138035 L295.206045,110.138035 C302.170277,110.138035 302.299244,115.167758 302.299244,115.167758 L302.299244,137.479093 L302.428212,137.479093 Z M338.281108,88.3425693 L364.461461,88.3425693 L364.461461,179.651385 L338.281108,179.651385 L338.281108,88.3425693 Z M401.217128,156.050378 L401.217128,88.3425693 L375.165743,88.3425693 L375.165743,156.050378 L375.165743,179.651385 L401.217128,179.651385 L436.425189,179.651385 L436.425189,156.050378 L401.217128,156.050378 Z M445.065995,156.308312 L445.065995,179.651385 L487.238287,179.651385 C495.879093,179.651385 510.710327,173.33199 511.226196,155.663476 L511.226196,146.635768 C511.226196,131.546599 498.84534,122.647859 487.238287,122.647859 L466.216625,122.647859 L466.216625,111.81461 L507.873048,111.81461 L507.873048,88.3425693 L467.893199,88.3425693 C457.575819,88.3425693 443.776322,96.8544081 443.776322,112.71738 L443.776322,120.842317 C443.776322,136.70529 457.446851,144.830227 467.893199,144.830227 C496.910831,144.959194 460.928967,144.830227 487.754156,144.830227 L487.754156,156.179345 L445.065995,156.308312 Z"></path>
+                          <path d="M9.02770781,179.522418 L110.911839,179.522418 C110.911839,179.522418 91.4377834,90.6639798 155.921411,54.6821159 C169.978841,47.8468514 214.730479,22.311335 287.983879,76.4775819 C290.30529,74.543073 292.497733,72.995466 292.497733,72.995466 C292.497733,72.995466 225.434761,6.06146096 150.76272,13.5415617 C113.233249,16.8947103 67.0629723,51.0710327 39.9798489,96.2095718 C12.8967254,141.348111 9.02770781,179.522418 9.02770781,179.522418 Z M221.307809,20.763728 L221.823678,12.1229219 C220.662972,11.4780856 217.438791,9.93047859 209.313854,7.60906801 L208.797985,16.1209068 C213.053904,17.5395466 217.180856,19.0871537 221.307809,20.763728 Z M209.055919,48.1047859 L208.54005,56.2297229 C212.79597,56.3586902 217.051889,56.8745592 221.307809,57.77733 L221.823678,49.7813602 C217.438791,48.8785894 213.182872,48.3627204 209.055919,48.1047859 Z M161.338035,7.86700252 L162.627708,7.86700252 L160.048363,-7.10542736e-15 C156.050378,-7.10542736e-15 151.923426,0.257934509 147.667506,0.773803526 L150.117884,8.38287154 C153.857935,7.99596977 157.597985,7.86700252 161.338035,7.86700252 Z M167.528463,55.3269521 L170.49471,64.2256927 C174.234761,62.4201511 177.974811,60.8725441 181.714861,59.7118388 L178.877582,51.2 C174.492695,52.4896725 170.752645,53.9083123 167.528463,55.3269521 Z M108.97733,21.4085642 L103.173804,12.5098237 C99.9496222,14.186398 96.5964736,15.9919395 93.1143577,18.0554156 L99.0468514,27.0831234 C102.4,25.0196474 105.624181,23.0851385 108.97733,21.4085642 Z M135.415617,79.4438287 L141.606045,88.729471 C143.798489,85.5052897 146.377834,82.5390428 149.215113,79.572796 L143.411587,70.8030227 C140.44534,73.511335 137.737028,76.4775819 135.415617,79.4438287 Z M116.715365,120.971285 L127.161713,129.225189 C127.677582,124.195466 128.580353,119.165743 129.870025,114.13602 L120.584383,106.784887 C118.907809,111.556675 117.747103,116.328463 116.715365,120.971285 Z M60.2277078,59.7118388 L51.0710327,51.715869 C47.7178841,54.9400504 44.4937028,58.1642317 41.5274559,61.3884131 L51.4579345,69.9002519 C54.1662469,66.418136 57.1324937,62.9360202 60.2277078,59.7118388 Z M21.279597,117.360202 L6.44836272,111.943577 C3.99798489,117.489169 1.28967254,123.937531 0,127.419647 L14.8312343,132.836272 C16.5078086,128.451385 19.2161209,122.13199 21.279597,117.360202 Z M114.780856,153.728967 C115.038791,160.564232 115.683627,166.109824 116.328463,169.978841 L131.804534,175.524433 C130.643829,170.49471 129.483123,164.820151 128.70932,158.75869 L114.780856,153.728967 Z"></path>
+                        </g>
+                      </svg>
+                    </span>
+                    <span class="line-text">Ruby on Rails</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Stack Card -->
+    <div class="card">
+      <div class="card-inner">
+          <div class="card-front">
+              <div class="card-icon">📱</div>
+          </div>
+          <div class="card-back">
+              <h3 class="card-title">Mobile</h3>
+              <div class="info-line">
+                  <span class="line-icon">⚛️</span>
+                  <span class="line-text">React Native</span>
+              </div>
+              <div class="info-line">
+                  <span class="line-icon">
+                      <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M213.696 348.032c-28.16 0-51.2 23.04-51.2 51.2V604.8c0 28.096 23.04 51.2 51.2 51.2s51.2-23.04 51.2-51.2V399.168c0-28.16-23.04-51.136-51.2-51.136z" fill=""/>
+                          <path d="M213.696 633.6a28.8 28.8 0 0 1-28.8-28.8V399.168a28.8 28.8 0 0 1 57.6 0V604.8a28.8 28.8 0 0 1-28.8 28.8z" fill="#1FDB00"/>
+                          <path d="M831.68 348.032c-28.16 0-51.2 23.04-51.2 51.2V604.8c0 28.096 22.976 51.2 51.2 51.2s51.2-23.04 51.2-51.2V399.168a51.2 51.2 0 0 0-51.2-51.136z" fill=""/>
+                          <path d="M831.68 633.6a28.8 28.8 0 0 1-28.8-28.8V399.168a28.8 28.8 0 0 1 57.6 0V604.8a28.8 28.8 0 0 1-28.8 28.8z" fill="#1FDB00"/>
+                          <path d="M294.656 709.184c0 24.64 20.16 44.8 44.8 44.8h43.008v116.8c0 28.096 23.04 51.2 51.2 51.2s51.2-23.04 51.2-51.2v-116.8h81.6v116.8c0 28.096 22.976 51.2 51.2 51.2s51.2-23.04 51.2-51.2v-116.8h38.976c24.64 0 44.8-20.16 44.8-44.8V348.032H294.656v361.152z" fill=""/>
+                          <path d="M617.664 899.648a28.8 28.8 0 0 1-28.8-28.8v-139.2H462.464v139.2a28.8 28.8 0 0 1-57.6 0v-139.2H339.52a22.4 22.4 0 0 1-22.4-22.464V370.432h413.184v338.752a22.4 22.4 0 0 1-22.4 22.464h-61.376v139.2c0 15.808-12.992 28.8-28.864 28.8z" fill="#1FDB00"/>
+                          <path d="M297.92 320h451.52a225.28 225.28 0 0 0-113.28-163.456l51.712-51.712a11.328 11.328 0 0 0 0-15.808h-0.064a11.2 11.2 0 0 0-15.808 0l-52.032 52.096c-1.728 1.664-2.24 3.968-2.624 6.144A219.456 219.456 0 0 0 528.704 128h-10.048c-27.52 0-53.824 5.184-78.208 14.4-0.256-0.384-0.128-0.96-0.448-1.28l-52.096-52.096a11.2 11.2 0 0 0-15.808 15.808l47.488 47.552A225.088 225.088 0 0 0 297.92 320z m325.376-120.768a25.984 25.984 0 1 1 0 51.904 25.984 25.984 0 0 1 0-51.904z m-197.952 0a25.984 25.984 0 1 1 0 51.904 25.984 25.984 0 0 1 0-51.904z" fill=""/>
+                          <path d="M325.568 297.6a202.88 202.88 0 0 1 55.296-91.456 48.448 48.448 0 1 0 38.592-28.928 197.696 197.696 0 0 1 99.2-26.816h9.984c35.648 0 69.568 9.664 98.944 26.624a48.448 48.448 0 1 0 41.024 31.04c24.768 24.256 43.392 54.912 53.184 89.472H325.568z" fill="#1FDB00"/>
+                      </svg>
+                  </span>
+                  <span class="line-text">For Android</span>
+              </div>
+              <div class="info-line">
+                  <span class="line-icon">
+                    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                    <svg width="15px" height="15px" viewBox="-1.5 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <g id="Dribbble-Light-Preview" transform="translate(-102.000000, -7439.000000)" fill="#000000">
+                            <g id="icons" transform="translate(56.000000, 160.000000)">
+                              <path d="M57.5708873,7282.19296 C58.2999598,7281.34797 58.7914012,7280.17098 58.6569121,7279 C57.6062792,7279.04 56.3352055,7279.67099 55.5818643,7280.51498 C54.905374,7281.26397 54.3148354,7282.46095 54.4735932,7283.60894 C55.6455696,7283.69593 56.8418148,7283.03894 57.5708873,7282.19296 M60.1989864,7289.62485 C60.2283111,7292.65181 62.9696641,7293.65879 63,7293.67179 C62.9777537,7293.74279 62.562152,7295.10677 61.5560117,7296.51675 C60.6853718,7297.73474 59.7823735,7298.94772 58.3596204,7298.97372 C56.9621472,7298.99872 56.5121648,7298.17973 54.9134635,7298.17973 C53.3157735,7298.17973 52.8162425,7298.94772 51.4935978,7298.99872 C50.1203933,7299.04772 49.0738052,7297.68074 48.197098,7296.46676 C46.4032359,7293.98379 45.0330649,7289.44985 46.8734421,7286.3899 C47.7875635,7284.87092 49.4206455,7283.90793 51.1942837,7283.88393 C52.5422083,7283.85893 53.8153044,7284.75292 54.6394294,7284.75292 C55.4635543,7284.75292 57.0106846,7283.67793 58.6366882,7283.83593 C59.3172232,7283.86293 61.2283842,7284.09893 62.4549652,7285.8199 C62.355868,7285.8789 60.1747177,7287.09489 60.1989864,7289.62485" id="apple-[#173]"></path>
+                            </g>
+                          </g>
+                        </g>
+                    </svg>
+                  </span>
+                <span class="line-text">For Ios</span>
+              </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Collaboration Card -->
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">👥</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Codebase</h3>
+                <div class="info-line">
+                    <span class="line-icon">📚</span>
+                    <span class="line-text">Documentation</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">
+                      <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                      <svg width="15px" height="15px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <g id="Dribbble-Light-Preview" transform="translate(-140.000000, -7559.000000)" fill="#000000">
+                            <g id="icons" transform="translate(56.000000, 160.000000)">
+                              <path d="M94,7399 C99.523,7399 104,7403.59 104,7409.253 C104,7413.782 101.138,7417.624 97.167,7418.981 C96.66,7419.082 96.48,7418.762 96.48,7418.489 C96.48,7418.151 96.492,7417.047 96.492,7415.675 C96.492,7414.719 96.172,7414.095 95.813,7413.777 C98.04,7413.523 100.38,7412.656 100.38,7408.718 C100.38,7407.598 99.992,7406.684 99.35,7405.966 C99.454,7405.707 99.797,7404.664 99.252,7403.252 C99.252,7403.252 98.414,7402.977 96.505,7404.303 C95.706,7404.076 94.85,7403.962 94,7403.958 C93.15,7403.962 92.295,7404.076 91.497,7404.303 C89.586,7402.977 88.746,7403.252 88.746,7403.252 C88.203,7404.664 88.546,7405.707 88.649,7405.966 C88.01,7406.684 87.619,7407.598 87.619,7408.718 C87.619,7412.646 89.954,7413.526 92.175,7413.785 C91.889,7414.041 91.63,7414.493 91.54,7415.156 C90.97,7415.418 89.522,7415.871 88.63,7414.304 C88.63,7414.304 88.101,7413.319 87.097,7413.247 C87.097,7413.247 86.122,7413.234 87.029,7413.87 C87.029,7413.87 87.684,7414.185 88.139,7415.37 C88.139,7415.37 88.726,7417.2 91.508,7416.58 C91.513,7417.437 91.522,7418.245 91.522,7418.489 C91.522,7418.76 91.338,7419.077 90.839,7418.982 C86.865,7417.627 84,7413.783 84,7409.253 C84,7403.59 88.478,7399 94,7399" id="github-[#142]"></path>
+                            </g>
+                          </g>
+                        </g>
+                      </svg>
+                    </span>
+                    <span class="line-text">GitHub</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Stack Card -->
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">☁️</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Service Stack</h3>
+                <div class="info-line">
+                    <span class="line-icon">📦</span>
+                    <span class="line-text">AWS S3</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">🤖</span>
+                    <span class="line-text">AI Integration</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Languages Stack Card -->
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">👨‍💻</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Programming languages</h3>
+                <div class="info-line">
+                    <span class="line-icon">
+                        <!-- Ruby SVG Icon -->
+                        <svg width="15px" height="15px" viewBox="0 -0.5 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid">
+                            <defs>
+                                <linearGradient x1="84.7503645%" y1="111.399353%" x2="58.2543962%" y2="64.5837087%" id="linearGradient-1">
+                                    <stop stop-color="#FB7655" offset="0%"></stop>
+                                    <stop stop-color="#FB7655" offset="0%"></stop>
+                                    <stop stop-color="#E42B1E" offset="41%"></stop>
+                                    <stop stop-color="#990000" offset="99%"></stop>
+                                    <stop stop-color="#990000" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="116.651024%" y1="60.8903211%" x2="1.74616041%" y2="19.2879503%" id="linearGradient-2">
+                                    <stop stop-color="#871101" offset="0%"></stop>
+                                    <stop stop-color="#871101" offset="0%"></stop>
+                                    <stop stop-color="#911209" offset="99%"></stop>
+                                    <stop stop-color="#911209" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="75.7744024%" y1="219.327131%" x2="38.9781357%" y2="7.82868176%" id="linearGradient-3">
+                                    <stop stop-color="#871101" offset="0%"></stop>
+                                    <stop stop-color="#871101" offset="0%"></stop>
+                                    <stop stop-color="#911209" offset="99%"></stop>
+                                    <stop stop-color="#911209" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="50.012428%" y1="7.23449921%" x2="66.4830414%" y2="79.1354134%" id="linearGradient-4">
+                                    <stop stop-color="#FFFFFF" offset="0%"></stop>
+                                    <stop stop-color="#FFFFFF" offset="0%"></stop>
+                                    <stop stop-color="#E57252" offset="23%"></stop>
+                                    <stop stop-color="#DE3B20" offset="46%"></stop>
+                                    <stop stop-color="#A60003" offset="99%"></stop>
+                                    <stop stop-color="#A60003" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="46.1741749%" y1="16.347907%" x2="49.9323342%" y2="83.0468449%" id="linearGradient-5">
+                                    <stop stop-color="#FFFFFF" offset="0%"></stop>
+                                    <stop stop-color="#FFFFFF" offset="0%"></stop>
+                                    <stop stop-color="#E4714E" offset="23%"></stop>
+                                    <stop stop-color="#BE1A0D" offset="56%"></stop>
+                                    <stop stop-color="#A80D00" offset="99%"></stop>
+                                    <stop stop-color="#A80D00" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="36.9653573%" y1="15.5936471%" x2="49.5282324%" y2="92.4776332%" id="linearGradient-6">
+                                    <stop stop-color="#FFFFFF" offset="0%"></stop>
+                                    <stop stop-color="#FFFFFF" offset="0%"></stop>
+                                    <stop stop-color="#E46342" offset="18%"></stop>
+                                    <stop stop-color="#C82410" offset="40%"></stop>
+                                    <stop stop-color="#A80D00" offset="99%"></stop>
+                                    <stop stop-color="#A80D00" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="13.6086166%" y1="58.3456855%" x2="85.7636612%" y2="-46.7167814%" id="linearGradient-7">
+                                    <stop stop-color="#FFFFFF" offset="0%"></stop>
+                                    <stop stop-color="#FFFFFF" offset="0%"></stop>
+                                    <stop stop-color="#C81F11" offset="54%"></stop>
+                                    <stop stop-color="#BF0905" offset="99%"></stop>
+                                    <stop stop-color="#BF0905" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="27.6242038%" y1="21.1345847%" x2="50.7445145%" y2="79.0557818%" id="linearGradient-8">
+                                    <stop stop-color="#FFFFFF" offset="0%"></stop>
+                                    <stop stop-color="#FFFFFF" offset="0%"></stop>
+                                    <stop stop-color="#DE4024" offset="31%"></stop>
+                                    <stop stop-color="#BF190B" offset="99%"></stop>
+                                    <stop stop-color="#BF190B" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="-20.6671297%" y1="122.281897%" x2="104.241521%" y2="-6.34211007%" id="linearGradient-9">
+                                    <stop stop-color="#BD0012" offset="0%"></stop>
+                                    <stop stop-color="#BD0012" offset="0%"></stop>
+                                    <stop stop-color="#FFFFFF" offset="7%"></stop>
+                                    <stop stop-color="#FFFFFF" offset="17%"></stop>
+                                    <stop stop-color="#C82F1C" offset="27%"></stop>
+                                    <stop stop-color="#820C01" offset="33%"></stop>
+                                    <stop stop-color="#A31601" offset="46%"></stop>
+                                    <stop stop-color="#B31301" offset="72%"></stop>
+                                    <stop stop-color="#E82609" offset="99%"></stop>
+                                    <stop stop-color="#E82609" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="58.7919609%" y1="65.2049657%" x2="11.9636556%" y2="50.1275621%" id="linearGradient-10">
+                                    <stop stop-color="#8C0C01" offset="0%"></stop>
+                                    <stop stop-color="#8C0C01" offset="0%"></stop>
+                                    <stop stop-color="#990C00" offset="54%"></stop>
+                                    <stop stop-color="#A80D0E" offset="99%"></stop>
+                                    <stop stop-color="#A80D0E" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="79.3194899%" y1="62.7538068%" x2="23.088288%" y2="17.8876818%" id="linearGradient-11">
+                                    <stop stop-color="#7E110B" offset="0%"></stop>
+                                    <stop stop-color="#7E110B" offset="0%"></stop>
+                                    <stop stop-color="#9E0C00" offset="99%"></stop>
+                                    <stop stop-color="#9E0C00" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="92.8800277%" y1="74.1223655%" x2="59.8414537%" y2="39.7039965%" id="linearGradient-12">
+                                    <stop stop-color="#79130D" offset="0%"></stop>
+                                    <stop stop-color="#79130D" offset="0%"></stop>
+                                    <stop stop-color="#9E120B" offset="99%"></stop>
+                                    <stop stop-color="#9E120B" offset="100%"></stop>
+                                </linearGradient>
+                                <radialGradient cx="32.0008013%" cy="40.2100469%" fx="32.0008013%" fy="40.2100469%" r="69.5729556%" id="radialGradient-13">
+                                    <stop stop-color="#A80D00" offset="0%"></stop>
+                                    <stop stop-color="#A80D00" offset="0%"></stop>
+                                    <stop stop-color="#7E0E08" offset="99%"></stop>
+                                    <stop stop-color="#7E0E08" offset="100%"></stop>
+                                </radialGradient>
+                                <radialGradient cx="13.5493795%" cy="40.859922%" fx="13.5493795%" fy="40.859922%" r="88.3861936%" id="radialGradient-14">
+                                    <stop stop-color="#A30C00" offset="0%"></stop>
+                                    <stop stop-color="#A30C00" offset="0%"></stop>
+                                    <stop stop-color="#800E08" offset="99%"></stop>
+                                    <stop stop-color="#800E08" offset="100%"></stop>
+                                </radialGradient>
+                                <linearGradient x1="56.5701955%" y1="101.716594%" x2="3.10480737%" y2="11.9932603%" id="linearGradient-15">
+                                    <stop stop-color="#8B2114" offset="0%"></stop>
+                                    <stop stop-color="#8B2114" offset="0%"></stop>
+                                    <stop stop-color="#9E100A" offset="43%"></stop>
+                                    <stop stop-color="#B3100C" offset="99%"></stop>
+                                    <stop stop-color="#B3100C" offset="100%"></stop>
+                                </linearGradient>
+                                <linearGradient x1="30.8698732%" y1="35.5989756%" x2="92.4707626%" y2="100.693616%" id="linearGradient-16">
+                                    <stop stop-color="#B31000" offset="0%"></stop>
+                                    <stop stop-color="#B31000" offset="0%"></stop>
+                                    <stop stop-color="#910F08" offset="44%"></stop>
+                                    <stop stop-color="#791C12" offset="99%"></stop>
+                                    <stop stop-color="#791C12" offset="100%"></stop>
+                                </linearGradient>
+                            </defs>
+                            <g>
+                                <path d="M197.467337,167.763618 L51.9461307,254.173266 L240.368563,241.387417 L254.880804,51.3929648 L197.467337,167.763618 Z" fill="url(#linearGradient-1)"></path>
+                                <path d="M240.677307,241.257487 L224.482412,129.479397 L180.369367,187.729045 L240.677307,241.257487 Z" fill="url(#linearGradient-2)"></path>
+                                <path d="M240.896,241.257487 L122.249648,231.943719 L52.5764824,253.930131 L240.896,241.257487 Z" fill="url(#linearGradient-3)"></path>
+                                <path d="M52.7437186,253.954573 L82.3831156,156.854673 L17.161005,170.800884 L52.7437186,253.954573 Z" fill="url(#linearGradient-4)"></path>
+                                <path d="M180.357789,188.050653 L153.085427,81.2253266 L75.0375879,154.384724 L180.357789,188.050653 Z" fill="url(#linearGradient-5)"></path>
+                                <path d="M248.693065,82.7304523 L174.916181,22.4739698 L154.371859,88.8924623 L248.693065,82.7304523 Z" fill="url(#linearGradient-6)"></path>
+                                <path d="M214.190955,0.990552764 L170.799598,24.9696482 L143.424322,0.668944724 L214.190955,0.990552764 Z" fill="url(#linearGradient-7)"></path>
+                                <path d="M0,203.37206 L18.1772864,170.220704 L3.47336683,130.727236 L0,203.37206 Z" fill="url(#linearGradient-8)"></path>
+                                <path d="M2.49567839,129.479397 L17.2896482,171.442814 L81.5726633,157.020623 L154.963618,88.8139899 L175.675176,23.0271357 L143.062834,0 L87.617608,20.7501508 C70.1491457,36.9977889 36.2516583,69.1457286 35.0295477,69.7503518 C33.8203015,70.3678392 12.6456281,110.388744 2.49567839,129.479397 L2.49567839,129.479397 Z" fill="#FFFFFF"></path>
+                                <path d="M54.441809,54.0944724 C92.3015075,16.5563819 141.108744,-5.62170854 159.839196,13.2759799 C178.55807,32.1736683 158.707136,78.0992965 120.847437,115.624523 C82.9877387,153.149749 34.7851256,176.54995 16.0675377,157.652261 C-2.66291457,138.767437 16.5821106,91.6196985 54.441809,54.0944724 L54.441809,54.0944724 Z" fill="url(#linearGradient-9)"></path>
+                                <path d="M52.7437186,253.91598 L82.1515578,156.507337 L179.817487,187.883417 C144.504925,220.996181 105.230151,248.988945 52.7437186,253.91598 L52.7437186,253.91598 Z" fill="url(#linearGradient-10)"></path>
+                                <path d="M155.092261,88.6223116 L180.164824,187.934874 C209.662714,156.918995 236.137487,123.574673 249.103437,82.3316583 L155.092261,88.6223116 L155.092261,88.6223116 Z" fill="url(#linearGradient-11)"></path>
+                                <path d="M248.847437,82.8333668 C258.881608,52.5507538 261.197186,9.1079397 213.880925,1.04201005 L175.056402,22.4868342 L248.847437,82.8333668 L248.847437,82.8333668 Z" fill="url(#linearGradient-12)"></path>
+                                <path d="M0,202.934673 C1.38934673,252.913849 37.4480402,253.658693 52.8080402,254.097367 L17.3282412,171.236985 L0,202.934673 L0,202.934673 Z" fill="#9E1209"></path>
+                                <path d="M155.232482,88.7766834 C177.899417,102.708744 223.58191,130.688643 224.508141,131.203216 C225.947658,132.013668 244.203417,100.418894 248.345729,82.5632161 L155.232482,88.7766834 L155.232482,88.7766834 Z" fill="url(#radialGradient-13)"></path>
+                                <path d="M82.1129648,156.507337 L121.426332,232.355377 C144.672161,219.748342 162.875176,204.388342 179.547337,187.934874 L82.1129648,156.507337 L82.1129648,156.507337 Z" fill="url(#radialGradient-14)"></path>
+                                <path d="M17.1738693,171.339899 L11.6036181,237.668342 C22.1137688,252.024925 36.5732663,253.272764 51.7403015,252.153568 C40.7670352,224.842613 18.8462312,170.233568 17.1738693,171.339899 L17.1738693,171.339899 Z" fill="url(#linearGradient-15)"></path>
+                                <path d="M174.826131,22.6540704 L252.925427,33.6144724 C248.757387,15.9517588 235.957387,4.55396985 214.139497,0.990552764 L174.826131,22.6540704 L174.826131,22.6540704 Z" fill="url(#linearGradient-16)"></path>
+                            </g>
+                        </svg>
+                    </span>
+                    <span class="line-text">Ruby</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">
+                        <!-- HTML SVG Icon -->
+                        <svg width="15px" height="15px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <title>file_type_html</title>
+                            <polygon points="5.902 27.201 3.655 2 28.345 2 26.095 27.197 15.985 30 5.902 27.201" style="fill:#e44f26"/>
+                            <polygon points="16 27.858 24.17 25.593 26.092 4.061 16 4.061 16 27.858" style="fill:#f1662a"/>
+                            <polygon points="16 13.407 11.91 13.407 11.628 10.242 16 10.242 16 7.151 15.989 7.151 8.25 7.151 8.324 7.981 9.083 16.498 16 16.498 16 13.407" style="fill:#ebebeb"/>
+                            <polygon points="16 21.434 15.986 21.438 12.544 20.509 12.324 18.044 10.651 18.044 9.221 18.044 9.654 22.896 15.986 24.654 16 24.65 16 21.434" style="fill:#ebebeb"/>
+                            <polygon points="15.989 13.407 15.989 16.498 19.795 16.498 19.437 20.507 15.989 21.437 15.989 24.653 22.326 22.896 22.372 22.374 23.098 14.237 23.174 13.407 22.341 13.407 15.989 13.407" style="fill:#fff"/>
+                            <polygon points="15.989 7.151 15.989 9.071 15.989 10.235 15.989 10.242 23.445 10.242 23.445 10.242 23.455 10.242 23.517 9.548 23.658 7.981 23.732 7.151 15.989 7.151" style="fill:#fff"/>
+                        </svg>
+                    </span>
+                    <span class="line-text">HTML</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">
+                        <!-- JS SVG Icon -->
+                        <svg width="15px" height="15px" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="28" height="28" fill="#FFCA28"/>
+                            <path d="M19 25.2879L21.0615 23.9237C21.2231 24.4313 22.2462 25.6368 23.5385 25.6368C24.8308 25.6368 25.4308 24.931 25.4308 24.463C25.4308 23.1878 24.1112 22.7382 23.4774 22.5223C23.374 22.4871 23.289 22.4581 23.2308 22.4328C23.2009 22.4198 23.1558 22.4025 23.0979 22.3804C22.393 22.1111 19.7923 21.1175 19.7923 18.2373C19.7923 15.065 22.8538 14.7002 23.5462 14.7002C23.9991 14.7002 26.1769 14.7557 27.2615 16.7939L25.2615 18.1898C24.8231 17.3015 24.0946 17.0081 23.6462 17.0081C22.5385 17.0081 22.3077 17.8201 22.3077 18.1898C22.3077 19.227 23.5112 19.6919 24.5273 20.0844C24.7932 20.1871 25.0462 20.2848 25.2615 20.3866C26.3692 20.91 28 21.7666 28 24.463C28 25.8136 26.8672 28.0002 24.0154 28.0002C20.1846 28.0002 19.1692 25.7003 19 25.2879Z" fill="#3E3E3E"/>
+                            <path d="M9 25.5587L11.1487 24.1953C11.317 24.7026 11.9713 25.638 12.9205 25.638C13.8698 25.638 14.3557 24.663 14.3557 24.1953V15.0002H16.9982V24.1953C17.041 25.4636 16.3376 28.0002 13.2332 28.0002C10.379 28.0002 9.19242 26.3039 9 25.5587Z" fill="#3E3E3E"/>
+                        </svg>
+                    </span>
+                    <span class="line-text">JS</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">
+                        <!-- CSS SVG Icon -->
+                        <svg width="15px" height="15px" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 28L4 3H28L26 28L16 31L6 28Z" fill="#1172B8"/>
+                            <path d="M26 5H16V29.5L24 27L26 5Z" fill="#33AADD"/>
+                            <path d="M19.5 17.5H9.5L9 14L17 11.5H9L8.5 8.5H24L23.5 12L17 14.5H23L22 24L16 26L10 24L9.5 19H12.5L13 21.5L16 22.5L19 21.5L19.5 17.5Z" fill="white"/>
+                        </svg>
+                    </span>
+                    <span class="line-text">CSS</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Looking For Card -->
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">🚀</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Looking For</h3>
+                <div class="info-line">
+                    <span class="line-icon">
+                      <?xml version="1.0" encoding="utf-8"?>
+                      <svg width="15px" height="15px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <title>file_type_astro</title>
+                        <path d="M5.9,18.847a7.507,7.507,0,0,0-.572,2.624,3.265,3.265,0,0,0,.551,1.553,7.427,7.427,0,0,0,2.093,1.681L13.1,28.119A7.332,7.332,0,0,0,15.2,29.287a3.239,3.239,0,0,0,1.5,0,7.381,7.381,0,0,0,2.117-1.16L24,24.711a7.512,7.512,0,0,0,2.117-1.688,3.241,3.241,0,0,0,.55-1.563,7.515,7.515,0,0,0-.587-2.643L21.547,4.551a3.973,3.973,0,0,0-.54-1.3,1.733,1.733,0,0,0-.7-.51,3.972,3.972,0,0,0-1.4-.122H13.005a3.932,3.932,0,0,0-1.4.125,1.713,1.713,0,0,0-.7.512,3.94,3.94,0,0,0-.535,1.3L5.9,18.848Zm13.24-13.2a3.329,3.329,0,0,1,.441,1.093l3.892,12.784a16.168,16.168,0,0,0-4.653-1.573L16.291,9.391a.331.331,0,0,0-.513-.169.323.323,0,0,0-.119.169l-2.5,8.557a16.14,16.14,0,0,0-4.674,1.579L12.393,6.743a3.281,3.281,0,0,1,.442-1.094,1.458,1.458,0,0,1,.582-.43,3.31,3.31,0,0,1,1.175-.1h2.793a3.314,3.314,0,0,1,1.176.1,1.454,1.454,0,0,1,.583.432ZM16.127,21.06a5.551,5.551,0,0,0,3.4-.923,2.8,2.8,0,0,1-.207,2.182A3.938,3.938,0,0,1,17.773,23.8c-.674.428-1.254.8-1.254,1.787a2.079,2.079,0,0,0,.209.914,2.49,2.49,0,0,1-1.535-2.3v-.061c0-.683,0-1.524-.962-1.524a1.028,1.028,0,0,0-.391.077,1.021,1.021,0,0,0-.552.551,1.03,1.03,0,0,0-.079.391,3.769,3.769,0,0,1-.988-2.644,4.206,4.206,0,0,1,.175-1.248c.4.757,1.92,1.32,3.731,1.32Z" style="fill:#ff5d01;fill-rule:evenodd"/>
+                      </svg>
+                    </span>
+                    <span class="line-text">Static site with Astro</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Micro SaaS Card -->
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">💡</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Micro SaaS</h3>
+                <div class="info-line">
+                    <span class="line-icon">⚡</span>
+                    <span class="line-text">Quick MVP</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Database Card -->
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">
+                  <?xml version="1.0" encoding="utf-8"?>
+                  <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 18V6" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M20 12L20 18" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M12 10C16.4183 10 20 8.20914 20 6C20 3.79086 16.4183 2 12 2C7.58172 2 4 3.79086 4 6C4 8.20914 7.58172 10 12 10Z" stroke="#1C274C" stroke-width="1.5"/>
+                    <path d="M20 12C20 14.2091 16.4183 16 12 16C7.58172 16 4 14.2091 4 12" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M20 18C20 20.2091 16.4183 22 12 22C7.58172 22 4 20.2091 4 18" stroke="#1C274C" stroke-width="1.5"/>
+                  </svg>
+                </div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Database</h3>
+                <div class="info-line">
+                    <span class="line-icon">🐘</span>
+                    <span class="line-text">PostgreSQL</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">
+                      <svg width="15px" height="15px" viewBox="0 0 109 113" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint0_linear)"/>
+                        <path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint1_linear)" fill-opacity="0.2"/>
+                        <path d="M45.317 2.07103C48.1765 -1.53037 53.9745 0.442937 54.0434 5.041L54.4849 72.2922H9.83113C1.64038 72.2922 -2.92775 62.8321 2.1655 56.4175L45.317 2.07103Z" fill="#3ECF8E"/>
+                        <defs>
+                          <linearGradient id="paint0_linear" x1="53.9738" y1="54.974" x2="94.1635" y2="71.8295" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#249361"/>
+                            <stop offset="1" stop-color="#3ECF8E"/>
+                          </linearGradient>
+                          <linearGradient id="paint1_linear" x1="36.1558" y1="30.578" x2="54.4844" y2="65.0806" gradientUnits="userSpaceOnUse">
+                            <stop/>
+                            <stop offset="1" stop-opacity="0"/>
+                          </linearGradient>
+                        </defs>
+                        </svg>
+
+                    </span>
+                    <span class="line-text">Supabase</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Duplicated card set for seamless looping -->
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">⚡</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Fast Performance</h3>
+                <div class="info-line">
+                  <span class="line-icon">✓</span>
+                  <span class="line-text">Instant loading</span>
+                </div>
+                <div class="info-line">
+                  <span class="line-icon">⚡</span>
+                  <span class="line-text">Optimized speed</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">🔒</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Security</h3>
+                <div class="info-line">
+                    <span class="line-icon">🔑</span>
+                    <span class="line-text">Encryption</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">
+                      <?xml version="1.0" encoding="utf-8"?>
+                      <svg width="15px" height="15px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="512" cy="512" r="512" style="fill:#008aaa"/>
+                        <path d="M786.2 395.5h-80.6c-1.5 0-3-.8-3.7-2.1l-64.7-112.2c-.8-1.3-2.2-2.1-3.8-2.1h-264c-1.5 0-3 .8-3.7 2.1l-67.3 116.4-64.8 112.2c-.7 1.3-.7 2.9 0 4.3l64.8 112.2 67.2 116.5c.7 1.3 2.2 2.2 3.7 2.1h264.1c1.5 0 3-.8 3.8-2.1L702 630.6c.7-1.3 2.2-2.2 3.7-2.1h80.6c2.7 0 4.8-2.2 4.8-4.8V400.4c-.1-2.7-2.3-4.9-4.9-4.9zM477.5 630.6l-20.3 35c-.3.5-.8 1-1.3 1.3-.6.3-1.2.5-1.9.5h-40.3c-1.4 0-2.7-.7-3.3-2l-60.1-104.3-5.9-10.3-21.6-36.9c-.3-.5-.5-1.1-.4-1.8 0-.6.2-1.3.5-1.8l21.7-37.6 65.9-114c.7-1.2 2-2 3.3-2H454c.7 0 1.4.2 2.1.5.5.3 1 .7 1.3 1.3l20.3 35.2c.6 1.2.5 2.7-.2 3.8l-65.1 112.8c-.3.5-.4 1.1-.4 1.6 0 .6.2 1.1.4 1.6l65.1 112.7c.9 1.5.8 3.1 0 4.4zm202.1-116.7L658 550.8l-5.9 10.3L592 665.4c-.7 1.2-1.9 2-3.3 2h-40.3c-.7 0-1.3-.2-1.9-.5-.5-.3-1-.7-1.3-1.3l-20.3-35c-.9-1.3-.9-2.9-.1-4.2l65.1-112.7c.3-.5.4-1.1.4-1.6 0-.6-.2-1.1-.4-1.6l-65.1-112.8c-.7-1.2-.8-2.6-.2-3.8l20.3-35.2c.3-.5.8-1 1.3-1.3.6-.4 1.3-.5 2.1-.5h40.4c1.4 0 2.7.7 3.3 2l65.9 114 21.7 37.6c.3.6.5 1.2.5 1.8 0 .4-.2 1-.5 1.6z" style="fill:#fff"/>
+                      </svg>
+                    </span>
+                    <span class="line-text">Keycloak</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">🗺️</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Global</h3>
+                <div class="info-line">
+                    <span class="line-icon">✓</span>
+                    <span class="line-text">Worldwide DNS</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">🌍</span>
+                    <span class="line-text">Multi-language</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">🛒</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Integration</h3>
+                <div class="info-line">
+                    <span class="line-icon">✓</span>
+                    <span class="line-text">Simple setup</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">🔗</span>
+                    <span class="line-text">API</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">📚</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">Docs</h3>
+                <div class="info-line">
+                    <span class="line-icon">✓</span>
+                    <span class="line-text">Guides</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">📖</span>
+                    <span class="line-text">Tutorials</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-icon">🖥️</div>
+            </div>
+            <div class="card-back">
+                <h3 class="card-title">CMS</h3>
+                <div class="info-line">
+                    <span class="line-icon">
+                      <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                      <svg width="15px" height="15px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                          <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="Color-" transform="translate(-400.000000, -760.000000)" fill="#00759D">
+                              <path d="M400,783.99925 C400,793.499047 405.520173,801.708803 413.525923,805.598425 L402.077565,774.232445 C400.747023,777.216038 400,780.519141 400,783.99925 Z M440.201556,782.788712 C440.201556,779.821619 439.135023,777.768055 438.222994,776.170505 C437.006456,774.191943 435.864921,772.517891 435.864921,770.540829 C435.864921,768.33426 437.537473,766.280696 439.895547,766.280696 C440.00205,766.280696 440.102553,766.294197 440.206056,766.300197 C435.936923,762.388075 430.247245,760 423.99955,760 C415.614288,760 408.238557,764.302134 403.946923,770.816838 C404.510941,770.834839 405.041958,770.845339 405.491972,770.845339 C408.00155,770.845339 411.888172,770.540829 411.888172,770.540829 C413.181212,770.464327 413.334217,772.366386 412.041176,772.517891 C412.041176,772.517891 410.740636,772.670896 409.29459,772.747398 L418.033864,798.743211 L423.287028,782.991218 L419.548911,772.747398 C418.25587,772.670896 417.030332,772.517891 417.030332,772.517891 C415.737292,772.441389 415.888797,770.464327 417.183337,770.540829 C417.183337,770.540829 421.146461,770.845339 423.504535,770.845339 C426.014113,770.845339 429.900734,770.540829 429.900734,770.540829 C431.195275,770.464327 431.34678,772.366386 430.053739,772.517891 C430.053739,772.517891 428.751698,772.670896 427.307153,772.747398 L435.980424,798.545205 L438.375999,790.546955 C439.411032,787.225851 440.201556,784.842276 440.201556,782.788712 Z M445.059908,772.48534 C445.163411,773.250364 445.221913,774.06939 445.221913,774.952917 C445.221913,777.387493 444.765899,780.125079 443.396356,783.549686 L436.065627,804.743848 C443.20135,800.584218 448,792.852977 448,783.9997 C448,779.82657 446.933467,775.903947 445.059908,772.48534 Z M424.421063,786.098716 L417.219338,807.022869 C419.370405,807.655889 421.644476,808.0009 423.99955,808.0009 C426.794137,808.0009 429.474721,807.517885 431.969299,806.640358 C431.906297,806.536854 431.846295,806.428851 431.798294,806.310347 L424.421063,786.098716 Z" id="Wordpress"></path>
+                            </g>
+                          </g>
+                      </svg>
+                    </span>
+                    <span class="line-text">Wordpress</span>
+                </div>
+                <div class="info-line">
+                    <span class="line-icon">
+                      <?xml version="1.0" encoding="utf-8"?>
+                      <svg fill="#000000" width="15px" height="15px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m3.438 13.605c.073-.281.149-.56.222-.842.284-1.083.565-2.17.855-3.254.105-.442.259-.831.459-1.19l-.012.024c.215-.371.583-.632 1.016-.699l.008-.001c.101-.023.218-.036.338-.036.467 0 .887.198 1.182.515l.001.001c.136.156.243.341.31.544l.003.011c.185.492.377 1.125.535 1.772l.025.124q.391 1.482.786 2.966c.006.023 0 .05.033.07.056-.222.116-.442.172-.661q.51-1.987 1.018-3.97c.062-.248.126-.495.191-.743.049-.185.124-.346.222-.491l-.004.006c.149-.221.38-.376.649-.422l.006-.001c.313-.065.674-.103 1.044-.104h.001c.073 0 .086.017.07.086q-.466 1.779-.928 3.558-.684 2.631-1.371 5.259c-.046.172-.089.347-.135.518-.01.033-.014.062-.059.066-.07.007-.151.011-.234.011-.263 0-.517-.039-.756-.111l.018.005c-.122-.043-.225-.11-.31-.195-.12-.112-.231-.229-.335-.351l-.005-.006c-.113-.169-.212-.363-.287-.569l-.006-.019c-.265-.639-.505-1.403-.679-2.192l-.017-.094c-.281-1.12-.568-2.24-.852-3.36-.018-.07-.047-.132-.087-.186l.001.001c-.043-.077-.125-.129-.218-.129-.002 0-.003 0-.005 0-.113.011-.205.087-.239.189l-.001.002c-.096.304-.165.614-.248.922-.334 1.288-.658 2.58-1.001 3.865-.102.383-.271.743-.4 1.12-.138.361-.369.66-.665.876l-.005.004c-.135.104-.3.174-.481.195h-.005c-.154.021-.333.032-.514.032-.054 0-.107-.001-.161-.003h.008c-.059 0-.08-.023-.099-.08q-.48-1.823-.968-3.643-.631-2.384-1.27-4.777l-.238-.902c-.006-.03-.032-.073.03-.079.105-.015.226-.023.349-.023.399 0 .778.089 1.117.248l-.016-.007c.234.122.41.33.487.581l.002.007c.172.56.301 1.126.446 1.691q.495 1.913.984 3.826c.003.017.008.033.014.048l-.001-.001z"/>
+                        <path d="m15.343 16.739c.099-.149.188-.281.278-.416q1.44-2.146 2.88-4.288c.011-.014.018-.032.018-.051 0-.023-.009-.043-.025-.058q-1.194-1.774-2.385-3.548l-.72-1.083c-.01-.017-.033-.033-.026-.066l.489.03c.304.02.602.04.902.056.244.03.461.129.636.276l-.002-.002c.158.12.291.264.396.426l.004.007c.518.786 1.03 1.576 1.569 2.346.24.34.343.307.598.056.126-.149.242-.316.342-.493l.008-.016c.446-.664.886-1.334 1.341-1.992.253-.354.642-.596 1.089-.65l.007-.001c.275-.031.594-.048.916-.048.104 0 .208.002.311.005h-.015c.08 0 .03.043.014.066-.222.33-.442.661-.667.991q-1.22 1.822-2.438 3.633c-.014.017-.023.04-.023.064 0 .028.011.053.029.071q1.546 2.299 3.089 4.598c.014.023.046.046.036.07s-.056.014-.08.014c-.089.003-.193.005-.298.005-.293 0-.583-.014-.869-.04l.037.003c-.424-.053-.794-.25-1.066-.541l-.001-.001c-.133-.16-.257-.338-.364-.527l-.01-.018c-.433-.647-.862-1.295-1.295-1.946-.068-.106-.154-.194-.254-.262l-.003-.002c-.033-.03-.077-.048-.126-.048s-.093.018-.126.049c-.073.051-.134.114-.183.186l-.002.003c-.545.779-1.05 1.586-1.579 2.378-.251.37-.639.631-1.09.709l-.01.001c-.214.037-.461.057-.713.057-.071 0-.142-.002-.212-.005h.01z"/>
+                        <path d="m14.639 8.758v.129q0 3.29.006 6.58c0 .012.001.025.001.039 0 .45-.248.843-.615 1.048l-.006.003c-.128.082-.281.138-.445.155h-.005c-.152.017-.327.026-.505.026-.01 0-.021 0-.031 0h.002c-.109 0-.109 0-.109-.106 0-1.186 0-2.372-.006-3.558 0-.998-.01-1.992 0-2.99.009-.189.115-.35.269-.438l.003-.001c.146-.096.307-.16.459-.245.304-.147.563-.301.807-.474l-.017.012c.056-.053.115-.112.194-.182z"/>
+                        <path d="m12.912 9.182c0-.012 0-.026 0-.04 0-.282.036-.555.104-.815l-.005.022c.09-.326.276-.6.526-.798l.003-.002c.231-.161.51-.27.811-.303l.008-.001c.089-.017.178-.023.267-.036.073-.014.093.026.096.089 0 .014.001.032.001.049 0 .119-.011.236-.032.35l.002-.012c-.066.403-.25.755-.516 1.028-.152.143-.335.255-.538.324l-.01.003c-.232.085-.433.193-.615.325l.007-.005c-.026.02-.056.059-.093.04s-.017-.066-.02-.099.003-.082.003-.118z"/></svg>
+                    </span>
+                    <span class="line-text">Wix</span>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 3: Contact Section -->
+<style>
+    .contact-section {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: white;
+      text-align: center;
+      padding-top: 2.5em;
+      padding-bottom: 2.5em;
+    }
+    
+    .contact-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .contact-title {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+    
+    .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    .contact-item {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .contact-item:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .contact-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    
+    .contact-label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .contact-value {
+        color: #ecf0f1;
+        font-size: 0.95rem;
+    }
+    
+    .contact-value a {
+        color: #3498db;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .contact-value a:hover {
+        color: #2980b9;
+    }
+</style>
+<section class="section contact-section" id="contact">
+    <div class="contact-container">
+        <h2 class="contact-title">Get In Touch</h2>
+        <p style="margin-bottom: 3rem; font-size: 1.1rem; opacity: 0.9;">
+            Ready to start your next project? Let's create something amazing together.
+        </p>
+        
+        <div class="contact-grid">
+            <div class="contact-item">
+                <div class="contact-icon">📧</div>
+                <div class="contact-label">Email</div>
+                <div class="contact-value">
+                    <a href="mailto:information@alegar.ch">information@alegar.ch</a>
+                </div>
+            </div>
+            
+            <div class="contact-item">
+                <div class="contact-icon">🌐</div>
+                <div class="contact-label">Social</div>
+                <div class="contact-value">
+                    <a href="https://linkedin.com/in/alex-garnier" target="_blank">LinkedIn</a><br>
+                    <a href="https://github.com/alegarn" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.2);">
+            <p style="opacity: 0.7; font-size: 0.9rem;">
+                © 2025 A. G. Web Services. Built with performance in mind.
+            </p>
+        </div>
+    </div>    
+</section>
+
+<!-- Deferred JavaScript for performance -->
+<script>
+    // Performance optimizations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        // Observe grid rows
+        document.querySelectorAll('.grid-row').forEach(row => {
+            observer.observe(row);
+        });
+        
+        // Smooth scroll for flying cards
+        document.querySelectorAll('.flying-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                if (href.startsWith('#')) {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                } else {
+                    // For external links, you would navigate to your actual pages
+                    window.location.href = this.getAttribute('data-href') || href;
+                }
+            });
+        });
+        
+        // Preload critical images after initial load
+        const preloadImages = [
+            // Add your actual image URLs here
+        ];
+        
+        preloadImages.forEach(src => {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = src;
+            document.head.appendChild(link);
+        });
+        
+        // Performance monitoring (optional)
+        if ('performance' in window) {
+            window.addEventListener('load', () => {
+                const perfData = performance.timing;
+                const loadTime = perfData.loadEventEnd - perfData.navigationStart;
+                console.log('Page load time:', loadTime + 'ms');
+            });
+        }
+    });
+    
+    // Service Worker for caching (optional)
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            // You would register your service worker here
+            // navigator.serviceWorker.register('/sw.js');
+        });
+    }
+    
+    // Reduce animations on slower devices
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+        document.documentElement.style.setProperty('--animation-duration', '0.01s');
+    }
+    
+    // Optimize for touch devices
+    if ('ontouchstart' in window) {
+        document.body.classList.add('touch-device');
+    }
+</script>
