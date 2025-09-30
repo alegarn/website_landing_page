@@ -1,11 +1,10 @@
 jQuery(document).ready(function($) {
     console.log('AJAX script loaded');
     console.log('ajax_object:', ajax_object);
-    
-    // Wait 1.5 seconds before loading content (after hero animations)
+
     setTimeout(function() {
         loadContent();
-    }, 1500);
+    }, 1000);
     
     return; // Exit here, the actual loading happens in loadContent()
         
