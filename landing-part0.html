@@ -1,0 +1,144 @@
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: Nunito Sans, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #005c59;
+    position: relative;
+  }
+
+  .hero-content {
+    color: white;
+    z-index: 100;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+  }
+  
+  .hero-title {
+    position: absolute;
+    left: 50%;
+    white-space: nowrap;
+    color: white !important;
+    font-size: 2.5em; 
+    margin: 0;
+    opacity: 0;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  }
+  
+  .hero-logo {
+    width: 150px; 
+    height: 150px;
+    border-radius: 20px;
+    margin: 2rem 0; 
+    box-shadow: 0 0 40px rgba(0, 160, 153, 0.5);
+    border: 2px solid rgba(0, 160, 153, 0.7);
+    opacity: 0;
+    max-width: 200px; 
+    height: auto;
+  }
+
+  /* Specific animations for hero content elements */
+  .hero-content h1.hero-title:nth-of-type(1) {
+    top: 40%;
+    transform: translate(-50%, -40%);
+    animation: fadeIn 0.5s forwards, textPushUp 0.5s forwards, titleGlow 3s ease-out 2.5s forwards;
+    animation-delay: 0s, 1s;
+  }
+
+  .hero-content img.hero-logo {
+    animation: fadeIn 1s forwards, logoGlow 1s ease-out 2.5s forwards;
+    animation-delay: 1.5s;
+  }
+
+  .hero-content h1.hero-title:nth-of-type(2) {
+    top: 60%;
+    transform: translate(-50%, -60%);
+    animation: fadeIn 0.5s forwards, textPushDown 0.5s forwards, titleGlow 3s ease-out 2.5s forwards;
+    animation-delay: 0.5s, 1s;
+  }
+
+  .arrow-down {
+    position: absolute;
+    bottom: 3em;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 20px solid white;
+    opacity: 0;
+    animation: fadeIn 1s forwards, glow 1s ease-out infinite;
+    animation-delay: 2.5s;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes textPushUp {
+    from {
+      transform: translate(-50%, -40%);
+    }
+    to {
+      transform: translate(-50%, -2em);
+    }
+  }
+
+  @keyframes textPushDown {
+    from {
+      transform: translate(-50%, -55%);
+    }
+    to {
+      transform: translate(-50%, 1em);
+    }
+  }
+
+  @keyframes logoGlow {
+    from {
+      box-shadow: 0 0 40px rgba(0, 160, 153, 0.5);
+    }
+    to {
+      box-shadow: 0 0 60px rgba(0, 160, 153, 0.8), 0 0 30px rgba(255, 255, 255, 0.4); 
+    }
+  }
+
+  @keyframes titleGlow {
+    from {
+      text-shadow: 0 0 0 rgba(0, 160, 153, 0.5);
+    }
+    to {
+      text-shadow: 0 0 20px rgba(0, 160, 153, 0.4), 0 0 40px rgba(255, 255, 255, 0.8);
+    }
+  }
+</style>
+<!-- PART 0: The landing -->
+<section class="section">
+  <div class="hero-content">
+      <h1 class="hero-title">One Idea</h1>
+      <img src="https://alegar.ch/wp-content/uploads/2025/09/logo.min_.jpg" class="hero-logo" alt="Company Logo" fetchpriority="high">
+      <h1 class="hero-title">One App</h1>
+  </div>
+  <a href="#hero" class="arrow-down" title="Scroll to the next section"></a>
+</section>
