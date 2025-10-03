@@ -14,6 +14,7 @@
 <meta name="description" content="One idea, one app - Transform your ideas into powerful applications">
 <link rel="preconnect" href="<?php echo admin_url(); ?>" crossorigin>
 <link rel="dns-prefetch" href="//stats.wp.com">
+<link rel="https://api.w.org/" href="https://alegar.ch/wp-json/">
 <meta name="msapplication-TileImage" content="https://alegar.ch/wp-content/uploads/2024/02/cropped-logo-270x270.jpg">
 <link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://alegar.ch/wp-json/oembed/1.0/embed?url=https%3A%2F%2Falegar.ch%2F">
 <link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://alegar.ch/wp-json/oembed/1.0/embed?url=https%3A%2F%2Falegar.ch%2F&format=xml">
