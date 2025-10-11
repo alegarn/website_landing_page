@@ -1,13 +1,5 @@
 jQuery(document).ready(function($) {
-    console.log('AJAX script loaded');
-    console.log('ajax_object:', ajax_object);
-
-    setTimeout(function() {
-        loadContent();
-    }, 1000);
-    
-    return; // Exit here, the actual loading happens in loadContent()
-        
+    loadContent();        
     function loadContent() {
         // Load both parts in PARALLEL
         function loadPart1() {
